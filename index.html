@@ -28,7 +28,7 @@
     <a-scene embedded arjs>
         <!-- Definir el video flotante sin marcador -->
         <a-entity position="0 0 -2">
-            <a-video id="holograma" src="holograma.mp4" width="1.5" height="1" loop muted playsinline preload="auto"></a-video>
+            <a-video id="holograma" src="holograma.mp4" width="1.5" height="1" loop muted playsinline preload="auto" webkit-playsinline></a-video>
         </a-entity>
         
         <!-- Cámara de AR.js -->
@@ -43,11 +43,18 @@
             let playButton = document.getElementById("playButton");
             let video = document.getElementById("holograma");
             
-            if (playButton && video) {
-                playButton.addEventListener("click", function() {
+            function playVideo() {
+                if (video.readyState >= 2) { // Verifica si el video está cargado
                     video.play().catch(e => console.log("Error al reproducir el video: ", e));
                     playButton.style.display = "none";
-                });
+                } else {
+                    console.log("El video aún no está listo, intentando de nuevo...");
+                    setTimeout(playVideo, 500);
+                }
+            }
+
+            if (playButton && video) {
+                playButton.addEventListener("click", playVideo);
             } else {
                 console.log("No se encontró el botón o el video en el DOM.");
             }
