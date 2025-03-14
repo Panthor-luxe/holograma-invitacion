@@ -6,6 +6,23 @@
     <title>Holograma en AR.js</title>
     <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
     <script src="https://rawgit.com/jeromeetienne/AR.js/1.7.2/aframe/build/aframe-ar.min.js"></script>
+    <style>
+        #playButton {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            padding: 15px;
+            font-size: 18px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            z-index: 9999;
+            display: block;
+        }
+    </style>
 </head>
 <body style="margin: 0; overflow: hidden;">
     <a-scene embedded arjs>
@@ -19,13 +36,21 @@
     </a-scene>
 
     <!-- Botón de reproducción para móviles -->
-    <button id="playButton" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); padding: 15px; font-size: 18px;">Reproducir Holograma</button>
+    <button id="playButton">Reproducir Holograma</button>
 
     <script>
-        document.getElementById("playButton").addEventListener("click", function() {
+        document.addEventListener("DOMContentLoaded", function() {
+            let playButton = document.getElementById("playButton");
             let video = document.getElementById("holograma");
-            video.play();
-            this.style.display = "none";
+            
+            if (playButton && video) {
+                playButton.addEventListener("click", function() {
+                    video.play().catch(e => console.log("Error al reproducir el video: ", e));
+                    playButton.style.display = "none";
+                });
+            } else {
+                console.log("No se encontró el botón o el video en el DOM.");
+            }
         });
     </script>
 </body>
