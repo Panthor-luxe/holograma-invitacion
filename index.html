@@ -44,20 +44,14 @@
             let video = document.getElementById("holograma");
             
             function playVideo() {
-                if (video.readyState >= 2) { // Verifica si el video está cargado
-                    video.play().catch(e => console.log("Error al reproducir el video: ", e));
+                video.play().then(() => {
                     playButton.style.display = "none";
-                } else {
-                    console.log("El video aún no está listo, intentando de nuevo...");
-                    setTimeout(playVideo, 500);
-                }
+                }).catch(e => {
+                    console.log("Error al reproducir el video: ", e);
+                });
             }
 
-            if (playButton && video) {
-                playButton.addEventListener("click", playVideo);
-            } else {
-                console.log("No se encontró el botón o el video en el DOM.");
-            }
+            playButton.addEventListener("click", playVideo);
         });
     </script>
 </body>
